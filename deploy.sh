@@ -2,10 +2,10 @@
 
 set -ex
 
+docker buildx build . --platform=linux/arm64,linux/amd64 -t holdenk/totallylegitco-modelserving:0.1a --push
+
 kubectl apply -f service.yaml
 kubectl apply -f podsa.yaml
-
-docker buildx build . --platform=linux/arm64,linux/amd64 -t holdenk/messaging-backend:0.1a --push
 
 # If the cluster is running update it otherwise start it
 # Note: this (in practice) does not work (for updating) currently.

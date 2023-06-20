@@ -121,7 +121,7 @@ available_node_types:
         containers:
           - name: ray-node
             imagePullPolicy: Always
-            image: holdenk/messaging-backend:0.1a
+            image: holdenk/totallylegitco-modelserving:0.1a
             command: ["/bin/bash", "-c", "--"]
             args: ["trap : TERM INT; touch /tmp/raylogs; tail -f /tmp/raylogs; sleep infinity & wait;"]
             env:
@@ -178,7 +178,7 @@ available_node_types:
         containers:
           - name: ray-node
             imagePullPolicy: Always
-            image: holdenk/messaging-backend:0.1a
+            image: holdenk/totallylegitco-modelserving:0.1a
             # Do not change this command - it keeps the pod alive until it is
             # explicitly killed.
             command: ["/bin/bash", "-c", "--"]
