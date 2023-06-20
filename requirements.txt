@@ -1,3 +1,4 @@
+nose
 accelerate>=0.16.0
 transformers[torch]
 datasets>=2.10.0,<3
