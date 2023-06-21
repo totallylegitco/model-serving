@@ -1,3 +1,4 @@
+flake8
 nose
 accelerate>=0.16.0
 transformers[torch]
