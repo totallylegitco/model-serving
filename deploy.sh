@@ -2,7 +2,8 @@
 
 set -ex
 
-docker buildx build . --platform=linux/arm64,linux/amd64 -t holdenk/totallylegitco-modelserving:0.1a --push
+#docker buildx build . --platform=linux/arm64,linux/amd64 -t holdenk/totallylegitco-modelserving:0.1a --push
+docker buildx build . --platform=linux/amd64 -t holdenk/totallylegitco-modelserving:0.1a --push
 
 kubectl apply -f service.yaml
 kubectl apply -f podsa.yaml

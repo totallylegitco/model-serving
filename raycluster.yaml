@@ -124,6 +124,11 @@ available_node_types:
             image: holdenk/totallylegitco-modelserving:0.1a
             command: ["/bin/bash", "-c", "--"]
             args: ["trap : TERM INT; touch /tmp/raylogs; tail -f /tmp/raylogs; sleep infinity & wait;"]
+            tolerations:
+            - effect: NoSchedule
+              key: beta.kubernetes.io/arch
+              operator: equals
+              value: arm64
             env:
               - name: POD_NAME
                 valueFrom:
@@ -187,6 +192,11 @@ available_node_types:
               - containerPort: 6379  # Redis port
               - containerPort: 10001  # Used by Ray Client
               - containerPort: 8265  # Used by Ray Dashboard
+            tolerations:
+            - effect: NoSchedule
+              key: beta.kubernetes.io/arch
+              operator: equals
+              value: arm64
             env:
               - name: POD_NAME
                 valueFrom:

@@ -7,5 +7,7 @@ COPY requirements.txt /tmp/req.txt
 RUN pip uninstall -y typing
 RUN pip install -U -r /tmp/req.txt
 RUN sudo mkdir -p /apps/serve; sudo chown -R ray /apps
-COPY ./serve /apps/serve
+# Copy bootstrap seperately so we can take advantage of caching.
+COPY ./serve/bootstrap.py /apps/serve/bootstrap.py
 RUN cd /apps; python -m serve.bootstrap
+COPY ./serve/* /apps/serve/

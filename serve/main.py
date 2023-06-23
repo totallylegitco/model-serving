@@ -1,10 +1,10 @@
 import time
 import ray
 from ray import serve
-from serve import model
+from serve import model.BioGPT
 
 def do_launch(grace_period: int = 240):
-    serve.run(model.bind())  # type: ignore
+    serve.run(model.BioGPT.bind())  # type: ignore
 
 if __name__ == "__main__":
     import argparse
@@ -18,5 +18,5 @@ if __name__ == "__main__":
         ray.init(args.ray_head, namespace="farts")
     else:
         ray.init("auto", namespace="farts")
-    result = do_launch(actor_count=args.actor_count)
+    result = do_launch()
     print(f"Got back {result} from launch")
