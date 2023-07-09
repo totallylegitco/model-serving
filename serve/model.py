@@ -1,12 +1,10 @@
-from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI
 from ray import serve
 from transformers import pipeline
 
 
-from typing import Optional
-
 app = FastAPI()
+
 
 @serve.deployment(num_replicas=2, route_prefix="/biogpt")
 class BioGPT():
