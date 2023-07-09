@@ -1,10 +1,10 @@
 import time
 import ray
 from ray import serve
-from serve import model.BioGPT
+from .model import BioGPT
 
 def do_launch(grace_period: int = 240):
-    serve.run(model.BioGPT.bind())  # type: ignore
+    serve.run(BioGPT.bind())  # type: ignore
 
 if __name__ == "__main__":
     import argparse
