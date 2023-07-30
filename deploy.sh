@@ -2,12 +2,14 @@
 
 set -ex
 
-#docker buildx build . --platform=linux/arm64,linux/amd64 -t holdenk/totallylegitco-modelserving:0.2a --push
+IMAGE=holdenk/totallylegitco-modelserving:0.3a
+
+docker "${IMAGE}" pull || docker buildx build . --platform=linux/arm64,linux/amd64 -t "${IMAGE}" --push
 cd serve
 serve build model:models -o models_serve.yaml
 cd ..
 
-# docker buildx build . --platform=linux/amd64 -t holdenk/totallylegitco-modelserving:0.2a --push
+docker buildx build . --platform=linux/amd64 -t "${IMAGE}" --push
 
 kubectl apply -f service.yaml
 kubectl apply -f podsa.yaml
