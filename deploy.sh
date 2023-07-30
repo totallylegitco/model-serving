@@ -2,20 +2,20 @@
 
 set -ex
 
-IMAGE=holdenk/totallylegitco-modelserving:0.3a
+BASE_IMAGE=holdenk/totallylegitco-modelserving
+TAG=0.5
+IMAGE="${BASE_IMAGE}:${TAG}"
 
-docker "${IMAGE}" pull || docker buildx build . --platform=linux/arm64,linux/amd64 -t "${IMAGE}" --push
+docker pull "${IMAGE}" || docker buildx build . --platform=linux/arm64,linux/amd64 -t "${IMAGE}" --push
 cd serve
 serve build model:models -o models_serve.yaml
 cd ..
-
-docker buildx build . --platform=linux/amd64 -t "${IMAGE}" --push
 
 kubectl apply -f service.yaml
 kubectl apply -f podsa.yaml
 
 # Kind of a hack but during dev this makes it easier.
-(helm install --namespace totallylegitco raycluster kuberay/ray-cluster --version 0.5.0 --values ray_cluster_values.yaml && sleep 20) || echo "Reusing existing cluster."
+(helm install --namespace totallylegitco raycluster kuberay/ray-cluster --version 0.5.0 --values ray_cluster_values.yaml --set image.tag="${TAG}" --set image.repository="${BASE_IMAGE}" && sleep 20) || echo "Reusing existing cluster."
 #--set image.repository=holdenk/holdenk/ray-x86-and-l4t --set image.tag=latest --set image.pullPolicy=Always --set head.resources.limits.memory=20G  --set head.resources.requests.memory=20G  --set worker.resources.limits.memory=16G  --set worker.resources.requests.memory=16G --set worker.nodeSelector="node.kubernetes.io/gpu: gpu" --set head.nodeSelector="node.kubernetes.io/gpu: gpu" && sleep 20) || echo "Reusing existing cluster."
 
 sleep 5

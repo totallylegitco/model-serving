@@ -9,3 +9,4 @@ ggml-python
 xformers
 ray[all]
 pydantic<2
+deepspeed
