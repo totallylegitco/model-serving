@@ -3,10 +3,10 @@ nose
 accelerate>=0.16.0
 transformers[torch]
 datasets>=2.10.0,<3
-protobuf
+protobuf>4.22
 sacremoses
 ggml-python
 xformers
 ray[all]
 pydantic<2
-deepspeed
+sentencepiece
