@@ -3,7 +3,7 @@ nose
 accelerate>=0.16.0
 transformers[torch]
 datasets>=2.10.0,<3
-protobuf>4.22
+protobuf==3.15.3
 sacremoses
 ggml-python
 xformers
