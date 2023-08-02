@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
-
-
 # On Jetson AGX we need to add /usr/local/cuda/bin to our path
 if [ -f /usr/local/cuda/bin/nvcc ]; then
   export PATH=$PATH:/usr/local/cuda/bin
