@@ -1,8 +1,6 @@
-FROM holdenk/ray-x86-and-l4t:c21092023
+FROM holdenk/ray-x86-and-l4t:d05082023
 # On ARM we _sometimes_ need to build the PostGres connector from source (depending on version).
 RUN sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y libpq-dev libopenblas-dev libprotobuf-dev libprotobuf-c-dev python3-protobuf
-# Setup the dependencies in advance
-RUN pip install torch ${PIP_EXTRA}
 COPY requirements.txt /tmp/
 COPY setup.sh ./
 RUN ./setup.sh
