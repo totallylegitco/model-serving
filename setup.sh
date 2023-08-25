@@ -1,10 +1,13 @@
 #!/bin/bash
 
+set -ex
+
 export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
 
 # On Jetson AGX we need to add /usr/local/cuda/bin to our path
 if [ -f /usr/local/cuda/bin/nvcc ]; then
   export PATH=$PATH:/usr/local/cuda/bin
+  export CUDA_HOME=/usr/local/cuda
 fi
 
 # See https://github.com/python/typing/issues/573
@@ -18,12 +21,12 @@ pip install pybind11[global]
 if [ ! -d apex ]; then
   git clone https://github.com/NVIDIA/apex
 fi
-cd apex
-pip install --upgrade -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" --config-settings "--build-option=--deprecated_fused_adam" ./
-cd ..
 
-CU_MINOR=$(nvcc --version |grep "cuda_" |cut -d "_" -f 2 |cut -d "." -f 2)
-pip install --upgrade "torch" --index-url https://download.pytorch.org/whl/cu11${CU_MINOR} || pip install torch
+cd apex
+
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" --config-settings "--build-option=--deprecated_fused_adam" ./
+
+cd ..
 
 pip install --upgrade ninja hjson py-cpuinfo
 
