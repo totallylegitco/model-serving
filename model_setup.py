@@ -1,11 +1,13 @@
 import torch
-from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
+from transformers import  AutoTokenizer, AutoModelForCausalLM, LlamaTokenizer, LlamaForCausalLM, pipeline
 
 model_path = 'yhyhy3/open_llama_7b_v2_med_dolphin_qlora_merged'
 
 tokenizer = LlamaTokenizer.from_pretrained(model_path)
 model = LlamaForCausalLM.from_pretrained(
-    model_path, torch_dtype=torch.float16, device_map='auto',
+    model_path,
+#    torch_dtype=torch.float16,
+    device_map='auto',
 )
 
 prompt = '''### Instruction: Answer the following question.
@@ -23,9 +25,9 @@ print(tokenizer.decode(generation_output[0]))
 
 model = None
 
-biogpt_pipeline = pipeline(
-            model="microsoft/BioGPT-Large-PubMedQA",
-            max_new_tokens=100,
-            device_map="auto",
-        )
+biogpt_tokenizer = AutoTokenizer.from_pretrained("microsoft/BioGPT-Large-PubMEDQA")
+
+biogpt_model = AutoModelForCausalLM.from_pretrained(
+    "microsoft/BioGPT-Large-PubMEDQA",
+)
 

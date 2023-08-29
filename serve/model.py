@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from ray import serve
-from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
+from transformers import  AutoTokenizer, AutoModelForCausalLM, LlamaTokenizer, LlamaForCausalLM, pipeline
 
 
 app = FastAPI()
@@ -9,15 +9,22 @@ app = FastAPI()
 @serve.deployment(num_replicas=2, route_prefix="/biogpt")
 class BioGPT():
     def __init__(self, max_new_tokens=200):
-        self.pipeline = pipeline(
-            model="microsoft/BioGPT-Large-PubMedQA",
-            max_new_tokens=max_new_tokens,
-            device_map="auto",
+        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/BioGPT-Large-PubMEDQA")
+
+        self.model = AutoModelForCausalLM.from_pretrained(
+            "microsoft/BioGPT-Large-PubMEDQA",
         )
+
 
     @app.get("infer")
     def infer(self, prompt: str) -> str:
-        return self.pipeline(prompt)
+        input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
+
+        generation_output = self.model.generate(
+            input_ids=input_ids, max_new_tokens=100
+        )
+
+        return generation_output
 
 
 @serve.deployment(num_replicas=2, route_prefix="/openllamamed")
@@ -31,13 +38,14 @@ class OpenLLAMAMed():
         )        
 
     @app.get("infer")
-    def infer(self, question: str) -> str:
-        prompt = f'''### Instruction: Answer the following question.
+    def infer(self, prompt: str) -> str:
+        input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
 
-### Input: {question}
+        generation_output = self.model.generate(
+            input_ids=input_ids, max_new_tokens=100
+        )
 
-### Response:'''
-        return self.pipeline(prompt)
+        return generation_output
     
 biogpt = BioGPT.bind()
 models = OpenLLAMAMed.bind(biogpt)
