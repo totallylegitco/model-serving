@@ -1,15 +1,37 @@
 # This file was generated using the `serve build` command on Ray v2.5.1.
 
-import_path: model:models
+proxy_location: EveryNode
 
-runtime_env: {}
+http_options:
 
-host: 0.0.0.0
+  host: 0.0.0.0
 
-port: 8000
+  port: 8000
 
-deployments:
+applications:
 
-- name: BioGPT
-  num_replicas: 2
+- name: app1
+
   route_prefix: /biogpt
+
+  import_path: model_endpoints:biogpt
+
+  runtime_env: {}
+
+  deployments:
+
+  - name: BioGPT
+    num_replicas: 2
+
+- name: app2
+
+  route_prefix: /openllamamed
+
+  import_path: model_endpoints:open_llama_med
+
+  runtime_env: {}
+
+  deployments:
+
+  - name: OpenLLAMAMed
+    num_replicas: 2

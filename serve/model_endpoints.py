@@ -1,3 +1,4 @@
+import torch
 from fastapi import FastAPI
 from ray import serve
 from transformers import  AutoTokenizer, AutoModelForCausalLM, LlamaTokenizer, LlamaForCausalLM, pipeline
@@ -35,7 +36,7 @@ class OpenLLAMAMed():
         self.tokenizer = LlamaTokenizer.from_pretrained(model_path)
         self.model = LlamaForCausalLM.from_pretrained(
             model_path, torch_dtype=torch.float16, device_map='auto',
-        )        
+        )
 
     @app.get("infer")
     def infer(self, prompt: str) -> str:
@@ -46,6 +47,8 @@ class OpenLLAMAMed():
         )
 
         return generation_output
-    
+
 biogpt = BioGPT.bind()
-models = OpenLLAMAMed.bind(biogpt)
+open_llama_med = OpenLLAMAMed.bind()
+serve.run(biogpt)
+serve.run(open_llama_med)

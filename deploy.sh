@@ -8,14 +8,14 @@ IMAGE="${BASE_IMAGE}:${TAG}"
 
 docker pull "${IMAGE}" || docker buildx build . --platform=linux/arm64,linux/amd64 -t "${IMAGE}" --push
 cd serve
-serve build model:models -o models_serve.yaml
+serve build --multi-app model_endpoints:biogpt model_endpoints:open_llama_med  -o models_serve.yaml
 cd ..
 
 kubectl apply -f service.yaml
 kubectl apply -f podsa.yaml
 
 # Kind of a hack but during dev this makes it easier.
-(helm install --namespace totallylegitco raycluster kuberay/ray-cluster --version 0.5.0 --values ray_cluster_values.yaml --set image.tag="${TAG}" --set image.repository="${BASE_IMAGE}" && sleep 20) || echo "Reusing existing cluster."
+(helm install --namespace totallylegitco raycluster kuberay/ray-cluster --version 0.6.0 --values ray_cluster_values.yaml --set image.tag="${TAG}" --set image.repository="${BASE_IMAGE}" && sleep 20) || echo "Reusing existing cluster."
 #--set image.repository=holdenk/holdenk/ray-x86-and-l4t --set image.tag=latest --set image.pullPolicy=Always --set head.resources.limits.memory=20G  --set head.resources.requests.memory=20G  --set worker.resources.limits.memory=16G  --set worker.resources.requests.memory=16G --set worker.nodeSelector="node.kubernetes.io/gpu: gpu" --set head.nodeSelector="node.kubernetes.io/gpu: gpu" && sleep 20) || echo "Reusing existing cluster."
 
 sleep 5

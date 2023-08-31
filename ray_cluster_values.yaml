@@ -1,0 +1,20 @@
+image:
+  repository: holdenk/ray-x86-and-l4t
+  tag: b20092023
+  pullPolicy: Always
+head:
+  resources:
+    requests:
+      memory: 20G
+    limits:
+      memory: 20G
+  nodeSelector:
+    node.kubernetes.io/gpu: gpu
+worker:
+  resources:
+    requests:
+      memory: 16G
+    limits:
+      memory: 16G
+  nodeSelector:
+    node.kubernetes.io/gpu: gpu
