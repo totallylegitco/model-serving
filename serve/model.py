@@ -31,7 +31,12 @@ class OpenLLAMAMed():
         )        
 
     @app.get("infer")
-    def infer(self, prompt: str) -> str:
+    def infer(self, question: str) -> str:
+        prompt = f'''### Instruction: Answer the following question.
+
+### Input: {question}
+
+### Response:'''
         return self.pipeline(prompt)
     
 biogpt = BioGPT.bind()
