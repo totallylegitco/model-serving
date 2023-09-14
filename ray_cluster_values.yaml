@@ -6,15 +6,19 @@ head:
   resources:
     requests:
       memory: 20G
+      ephemeral-storage: 20Gi
     limits:
       memory: 20G
+      ephemeral-storage: 25Gi
   nodeSelector:
     node.kubernetes.io/gpu: gpu
 worker:
   resources:
     requests:
       memory: 16G
+      ephemeral-storage: 20Gi
     limits:
       memory: 16G
+      ephemeral-storage: 25Gi
   nodeSelector:
     node.kubernetes.io/gpu: gpu
