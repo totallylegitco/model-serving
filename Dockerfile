@@ -6,3 +6,4 @@ COPY setup.sh ./
 RUN ./setup.sh
 COPY model_setup.py ./
 RUN python model_setup.py
+COPY serve/* ./

@@ -14,30 +14,29 @@ spec:
   # Only one of serveConfig and serveConfigV2 should be used.
   serveConfigV2: |
     applications:
-      applications:
-        - name: app1
-          route_prefix: /biogpt
-          import_path: model_endpoints:biogpt
+      - name: app1
+        route_prefix: /biogpt
+        import_path: model_endpoints.biogpt
 
-          runtime_env: {}
+        runtime_env: {}
 
-          deployments:
+        deployments:
 
-          - name: BioGPT
-            num_replicas: 2
+        - name: BioGPT
+          num_replicas: 2
 
-        - name: app2
+      - name: app2
 
-          route_prefix: /openllamamed
+        route_prefix: /openllamamed
 
-          import_path: model_endpoints:open_llama_med
+        import_path: model_endpoints.open_llama_med
+        
+        runtime_env: {}
+        
+        deployments:
 
-          runtime_env: {}
-
-          deployments:
-
-          - name: OpenLLAMAMed
-            num_replicas: 2
+        - name: OpenLLAMAMed
+          num_replicas: 2
   rayClusterConfig:
     rayVersion: '2.7.0' # should match the Ray version in the image of the containers
     ######################headGroupSpecs#################################
@@ -55,14 +54,14 @@ spec:
             node.kubernetes.io/gpu: gpu
           containers:
             - name: ray-head
-              image: holdenk/totallylegitco-modelserving:0.6
+              image: holdenk/totallylegitco-modelserving:0.7
               resources:
                 limits:
                   cpu: 2
-                  memory: 20Gi
+                  memory: 60Gi
                   ephemeral-storage: 30Gi
                 requests:
-                  memory: 20Gi
+                  memory: 60Gi
                   ephemeral-storage: 30Gi
               ports:
                 - containerPort: 6379
@@ -95,12 +94,12 @@ spec:
                   preStop:
                     exec:
                       command: ["/bin/sh","-c","ray stop"]
-                image: holdenk/totallylegitco-modelserving:0.6
+                image: holdenk/totallylegitco-modelserving:0.7
                 resources:
                   limits:
                     cpu: 2
-                    memory: 20Gi
-                    ephemeral-storage: 30Gi
+                    memory: 60Gi
+                    ephemeral-storage: 60Gi
                   requests:
-                    memory: 20Gi
-                    ephemeral-storage: 30Gi
+                    memory: 60Gi
+                    ephemeral-storage: 60Gi
